@@ -52,7 +52,7 @@ int main(void){
 						printf(" %d ", lugar[l][c]);
 				}
 				printf("\nPressione qualquer tecla para voltar ao menu: ");
-				op = getch();
+				getch();
 				break;
 				
 			case 'C':
