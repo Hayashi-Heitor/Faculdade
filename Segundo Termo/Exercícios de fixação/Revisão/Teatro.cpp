@@ -69,7 +69,7 @@ int main(void){
 				printf("Poltronas Livres: %d\n", contL);
 				printf("Poltronas Ocupadas: %d\n", contO);
 				printf("Pressione qualquer tecla para voltar ao menu: ");
-				op = getch();
+				getch();
 				break;
 			
 			case 'D':
@@ -84,7 +84,7 @@ int main(void){
 				else
 					printf("A poltrona da linha %d coluna %d se encontra vazia\n", l, c);
 				printf("Pressione qualquer tecla para retornar ao menu: ");
-				op = getch();
+				getch();
 				break;
 				
 			case 'E':
@@ -95,7 +95,7 @@ int main(void){
 						lugar[l][c] = 0;
 				printf("Redefinicao concluida com sucesso!\n");
 				printf("Pressione qualquer tecla para retornar ao menu\n");
-				op = getch();
+				getch();
 		}
 	} while (op != 27);
 	
