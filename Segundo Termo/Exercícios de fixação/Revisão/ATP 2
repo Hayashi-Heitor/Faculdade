@@ -1,0 +1,245 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <ctype.h>
+#include <string.h>
+
+#define TFP 10
+#define TFC 30
+#define TFV 50
+
+int main(void)
+{
+	char op, Produto[TFP][30], Cliente[TFC][30], AuxProd[30];
+	int i, pos, TLV=0, TLC=0, TLP=0, MatVendas[TFV][3], Estoque[TFP];
+	float Preco[TFP];
+	
+	
+	do
+	{
+		system("cls");     //clrscr();
+		printf("\n### M E N U  VENDAS ###\n");
+		printf("[A] Cadastrar Produtos\n");
+		printf("[B] Exibir Produtos\n");
+		printf("[C] Consultar Produtos\n");
+		printf("[D] Excluir Produtos\n");
+		printf("[E] Alterar Estoque de Produtos\n");
+		printf("[F] Ordenar Produtos pela Qtde em Estoque (Decrescente)\n");
+		printf("[G] Cadastrar Clientes\n");
+		printf("[H] Exibir Clientes\n");
+		printf("[I] Ordenar Clientes (Crescente)\n");
+		printf("[J] Realizar Vendas\n");
+		printf("[K] Exibir Vendas\n");
+		printf("[ESC] Finalizar\n");
+		printf("\n\nOpcao desejada: ");
+		
+		op = toupper(getch()); //getche();
+		switch(op)
+		{
+			case 'A':  system("cls");
+					   printf("\nCadastrar Produtos:\n");
+					   if (TLP==TFP)
+					   {
+					   	  printf("\nVetor de Produtos Cheio!\n");
+					   	  getch();
+					   }
+					   else
+					   		{
+					   		   printf("Descricao do Produto [%d]: ",TLP);
+							   fflush(stdin);
+							   gets(AuxProd);
+							   //while (TLP<TFP && AuxProd[0]!='\0')
+							   //while (TLP<TFP && strlen(AuxProd)>0)
+							   //while (TLP<TFP && strcmp(AuxProd,"")!=0)
+							   while (TLP<TFP && strcmp(AuxProd,"\0")!=0)
+							   {
+								  //Busca para validar a existência do Produto
+								  pos=0;
+								  while (pos<TLP && stricmp(AuxProd,Produto[pos])!=0)
+								  			pos++;
+								  
+								  if(pos==TLP) //Não achou...
+								  {
+									  strcpy(Produto[TLP],AuxProd);
+									  printf("Preco [%d]: ",TLP);
+									  scanf("%f",&Preco[TLP]);
+									  printf("Qtde Estoque [%d]: ",TLP);
+									  scanf("%d",&Estoque[TLP]);
+									  TLP++;
+								  }
+								  else
+								  	{
+								  		printf("\nProduto ja Cadastrado!\n");
+								  		getch();
+								  	}
+								  
+								  
+								  if (TLP<TFP)
+								  {
+								  	printf("\nDescricao do Produto [%d]: ",TLP);
+							        fflush(stdin);
+							        gets(AuxProd);
+								  }
+								  else
+								  	  {
+								  	  	printf("\nVetor de Produtos Cheio!\n");
+								  	  	getch();
+								  	  }
+							   }
+					   		}
+					   
+					   break;
+					   
+			case 'B':  printf("\nRelatorio de Produtos:\n");
+					   if (TLP==0)
+					      printf("\nNao ha Produtos!\n");
+					   else
+				   		  for(i=0; i<TLP; i++)
+				   		  {
+				   		  	printf("\nProduto[%d]:\n",i);
+							printf("Descricao: %s\n",Produto[i]);
+				   		  	printf("Preco: R$ %.2f\n",Preco[i]);
+				   		  	printf("Estoque: %d\n",Estoque[i]);
+				   		  }
+					   
+					   getch();
+					   break;
+					   
+			case 'C':
+				system("cls");
+				printf("### CONSULTA DE PRODUTOS ###\n");
+				
+				if(TLP == 0){
+					printf("Nenhum produto cadastrado!");
+					getch();
+				}
+				
+				else{
+					printf("\nInsira o nome do produto: ");
+					fflush(stdin);
+					gets(AuxProd);
+					
+					while(strcmp(AuxProd, "") != 0){
+					
+					pos = 0;
+					while(pos < TLP && stricmp(AuxProd, Produto[pos]) != 0)
+						pos ++;
+						
+					if(pos < TLP){
+						system("cls");
+						printf("\nProduto: %s", Produto[pos]);
+						printf("\nPreco: %.2fR$", Preco[pos]);
+						printf("\nEstoque: %d", Estoque[pos]);
+						printf("\nInsira outro produto: ");
+						gets(AuxProd);
+						}
+						
+					else{
+						printf("\nProduto nao encontrado!");
+						printf("\n Insira novamente um produto valido: ");
+						fflush(stdin);
+						gets(AuxProd);
+						}
+					}
+				}
+					   break;
+			
+			case 'D':
+				system("cls");
+				printf("\n### EXCLUSAO DE PRODUTOS ###\n");
+				
+				if (TLP == 0){
+					printf("Nao ha produtos para a exclusao\n");
+					getch();
+				}
+
+				else{
+				printf("\nInsira o produto a ser excluido: ");
+				fflush(stdin);
+				gets(AuxProd);	
+				
+				while(TLP != 0 && strcmp(AuxProd, "") != 0){
+					
+					pos = 0;
+					while(pos < TLP && stricmp(AuxProd, Produto[pos]) != 0)
+						pos ++;
+					
+					if(pos < TLP){
+						for(i=pos; i<TLP-1; i++){
+							Preco[i] = Preco[i+1];
+							strcpy(Produto[i], Produto[i+1]);
+							Estoque[i] = Estoque[i+1];
+						}
+						TLP --;
+						printf("\nInsira outro produto para exclusao: ");
+						fflush(stdin);
+						gets(AuxProd);
+					}
+					else{
+						printf("Produto nao encontrado\n");
+						printf("Insira um valor valido: ");
+						fflush(stdin);
+						gets(AuxProd);
+					}
+				}
+			}
+			
+			break;
+			
+			case'E':
+				system("cls");
+				if(TLP == 0){
+					printf("Nao ha produtos cadastrados\n");
+					getch();
+				}
+				
+				else{
+				printf("\n### ALTERNAR ESTOQUE ###\n");
+				printf("\nInsira o produto a ter o estoque alterado: ");
+				fflush(stdin);
+				gets(AuxProd);
+				
+				while(strcmp(AuxProd, "") != 0){
+					
+					pos = 0;
+					while(pos < TLP && strcmp(AuxProd, Produto[pos]))
+						pos ++;
+					
+					if(pos < TLP){
+						printf("\nEstoque atual: %d\n", Estoque[pos]);
+						printf("Insira o novo estoque: ");
+						scanf("%d", &Estoque[pos]);
+						printf("\nInsira um novo produto para alteracao: ");
+						fflush(stdin);
+						gets(AuxProd);
+						}
+					}
+				}
+				
+			break;
+			
+			case'F':
+				system("cls");
+				printf("\n### ORDENACAO POR ESTOQUE ###\n");
+				
+			case 'G':  printf("\nCadastrar Clientes:\n");
+					   getch();
+					   break;
+					   
+			case 'H':  printf("\nRelatorio de Clientes:\n");
+					   getch();
+					   break;
+					   
+			case 'J':  printf("\nRealizar Vendas:\n");
+					   getch();
+					   break;
+			
+			case 'K':  printf("\nExibir Vendas:\n");
+					   getch();
+					   break;
+		}
+		
+	}while (op != 27);  //ESC
+	
+	return 0;
+}
