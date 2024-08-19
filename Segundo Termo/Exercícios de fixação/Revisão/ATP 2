@@ -11,8 +11,8 @@
 int main(void)
 {
 	char op, Produto[TFP][30], Cliente[TFC][30], AuxProd[30];
-	int i, pos, TLV=0, TLC=0, TLP=0, MatVendas[TFV][3], Estoque[TFP];
-	float Preco[TFP];
+	int i, j, pos, TLV=0, TLC=0, TLP=0, MatVendas[TFV][3], Estoque[TFP], AuxEsto;
+	float Preco[TFP], AuxPreco[TFP];
 	
 	
 	do
@@ -90,19 +90,20 @@ int main(void)
 					   
 					   break;
 					   
-			case 'B':  printf("\nRelatorio de Produtos:\n");
-					   if (TLP==0)
-					      printf("\nNao ha Produtos!\n");
-					   else
-				   		  for(i=0; i<TLP; i++)
+			case 'B': 
+				systen("cls");
+				printf("\nRelatorio de Produtos:\n");
+				if (TLP==0)
+					printf("\nNao ha Produtos!\n");
+				else
+				   	for(i=0; i<TLP; i++)
 				   		  {
 				   		  	printf("\nProduto[%d]:\n",i);
 							printf("Descricao: %s\n",Produto[i]);
 				   		  	printf("Preco: R$ %.2f\n",Preco[i]);
 				   		  	printf("Estoque: %d\n",Estoque[i]);
 				   		  }
-					   
-					   getch();
+					getch();
 					   break;
 					   
 			case 'C':
@@ -221,8 +222,36 @@ int main(void)
 			case'F':
 				system("cls");
 				printf("\n### ORDENACAO POR ESTOQUE ###\n");
+				if(TLP == 0){
+					printf("\nNao ha produtos cadastrados!");
+					getch();
+				}
+				else{
+					for(i=0; i<TLP-1; i++)
+						for(j=i+1; j<TLP; j++)
+							if(Estoque[i] < Estoque[j]){
+								
+								AuxEsto = Estoque[i];
+								Estoque[i] = Estoque[j];
+								Estoque[j] = AuxEsto;
+								
+								AuxPreco = Preco[i];
+								Preco[i] = Preco[j];
+								Preco[j] = AuxPreco;
+								
+								strcpy(AuxProd, Produto[i]);
+								strcpy(Produto[i], Produto[j]);
+								strcpy(Produto[j], AuxProd);
+							}
+				printf("\nOrdenacao efetuada com sucesso!");
+				getch();
+				}
 				
-			case 'G':  printf("\nCadastrar Clientes:\n");
+			break;
+				
+			case 'G': 
+			printf("\nCadastrar Clientes:\n");
+					
 					   getch();
 					   break;
 					   
