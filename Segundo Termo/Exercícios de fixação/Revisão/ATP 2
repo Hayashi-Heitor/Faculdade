@@ -10,9 +10,9 @@
 
 int main(void)
 {
-	char op, Produto[TFP][30], Cliente[TFC][30], AuxProd[30];
-	int i, j, pos, TLV=0, TLC=0, TLP=0, MatVendas[TFV][3], Estoque[TFP], AuxEsto;
-	float Preco[TFP], AuxPreco[TFP];
+	char op, Produto[TFP][30], Cliente[TFC][30], AuxProd[30], AuxCli[30];
+	int i, j, pos, TLV=0, TLC=0, TLP=0, MatVendas[TFV][3], Estoque[TFP];
+	float Preco[TFP];
 	
 	
 	do
@@ -28,8 +28,9 @@ int main(void)
 		printf("[G] Cadastrar Clientes\n");
 		printf("[H] Exibir Clientes\n");
 		printf("[I] Ordenar Clientes (Crescente)\n");
-		printf("[J] Realizar Vendas\n");
-		printf("[K] Exibir Vendas\n");
+		printf("[J] Excluir Clientes\n");
+		printf("[K] Realizar Vendas\n");
+		printf("[L] Exibir Vendas\n");
 		printf("[ESC] Finalizar\n");
 		printf("\n\nOpcao desejada: ");
 		
@@ -90,175 +91,233 @@ int main(void)
 					   
 					   break;
 					   
-			case 'B': 
-				systen("cls");
-				printf("\nRelatorio de Produtos:\n");
+			case 'B':
+			system("cls");
+			printf("\n### RELATORIO DE PRODUTOS\n");
 				if (TLP==0)
 					printf("\nNao ha Produtos!\n");
 				else
-				   	for(i=0; i<TLP; i++)
-				   		  {
-				   		  	printf("\nProduto[%d]:\n",i);
-							printf("Descricao: %s\n",Produto[i]);
-				   		  	printf("Preco: R$ %.2f\n",Preco[i]);
-				   		  	printf("Estoque: %d\n",Estoque[i]);
-				   		  }
-					getch();
+				   	for(i=0; i<TLP; i++){
+				   	printf("\nProduto[%d]:\n",i);
+					printf("Descricao: %s\n",Produto[i]);
+				   	printf("Preco: R$ %.2f\n",Preco[i]);
+				   	printf("Estoque: %d\n",Estoque[i]);
+				   	}
+					   
+					   getch();
 					   break;
 					   
 			case 'C':
+			system("cls");
+			printf("\nConsultar Produtos:\n");
+					   if (TLP==0)
+					   {
+					   	  printf("\nNao ha Produtos!\n");
+					   	  getch();
+					   }
+					   else	
+					   	  {
+					   	  	 printf("\nProduto a Consultar: ");
+					   	  	 fflush(stdin);
+					   	  	 gets(AuxProd);
+					   	  	 while (strcmp(AuxProd,"\0")!=0)
+					   	  	 {
+					   	  	 	pos=0;
+					   	  	 	while(pos<TLP && stricmp(AuxProd,Produto[pos])!=0)
+					   	  	 			pos++;
+					   	  	 	
+					   	  	 	if(pos<TLP)  //Achou
+					   	  	 	{
+					   	  	 		printf("\n### Detalhes do Produto ###\n");
+					   	  	 		printf("Produto: %s",Produto[pos]);
+					   	  	 		printf("\nPreco: R$ %.2f",Preco[pos]);
+					   	  	 		printf("\nEstoque: %d\n",Estoque[pos]);
+					   	  	 	}
+					   	  	 	else
+					   	  	 		printf("\nProduto nao Cadastrado!\n");
+					   	  	 	
+								getch();
+								printf("\nProduto a Consultar: ");
+					   	  	 	fflush(stdin);
+					   	  	 	gets(AuxProd);
+					   	  	 }
+					   	  }
+					   
+					   break;
+					   
+			case 'D': 
+			system("cls");
+			printf("\n### EXCLUIR PRODUTOS ###\n");
+					   if (TLP==0)
+					   {
+					   	  printf("\nNao ha Produtos!\n");
+					   	  getch();
+					   }
+					   else	
+					   	  {
+					   	  	 printf("\nProduto a Excluir: ");
+					   	  	 fflush(stdin);
+					   	  	 gets(AuxProd);
+					   	  	 while (TLP>0 && strcmp(AuxProd,"\0")!=0)
+					   	  	 {
+					   	  	 	pos=0;
+					   	  	 	while(pos<TLP && stricmp(AuxProd,Produto[pos])!=0)
+					   	  	 			pos++;
+					   	  	 	
+					   	  	 	if(pos<TLP)  //Achou
+					   	  	 	{
+					   	  	 		printf("\n### Detalhes do Produto ###\n");
+					   	  	 		printf("Produto: %s",Produto[pos]);
+					   	  	 		printf("\nPreco: R$ %.2f",Preco[pos]);
+					   	  	 		printf("\nEstoque: %d\n",Estoque[pos]);
+					   	  	 		printf("\nConfirma Exclusao (S/N)? ");
+					   	  	 		if (toupper(getche())=='S')
+					   	  	 		{
+					   	  	 			for(; pos<TLP-1; pos++)
+					   	  	 			{
+					   	  	 				strcpy(Produto[pos],Produto[pos+1]);
+					   	  	 				Estoque[pos] = Estoque[pos+1];
+					   	  	 				Preco[pos] = Preco[pos+1];	
+					   	  	 			}
+					   	  	 			TLP--;
+					   	  	 			printf("\nProduto [%s] Excluido!\n", AuxProd);
+					   	  	 		}
+					   	  	 	}
+					   	  	 	else
+					   	  	 		printf("\nProduto nao Cadastrado!\n");
+					   	  	 	
+								getch();
+								printf("\nProduto a Excluir: ");
+					   	  	 	fflush(stdin);
+					   	  	 	gets(AuxProd);
+					   	  	 }
+					   	  }
+					   
+					   break;
+					   
+			case 'E':
 				system("cls");
-				printf("### CONSULTA DE PRODUTOS ###\n");
-				
+				printf("\nAlterar Estoque de Produtos:\n");
+					   if (TLP==0)
+					   {
+					   	  printf("\nNao ha Produtos!\n");
+					   	  getch();
+					   }
+					   else	
+					   	  {
+					   	  	 printf("\nAlterar Estoque do Produto: ");
+					   	  	 fflush(stdin);
+					   	  	 gets(AuxProd);
+					   	  	 while (strcmp(AuxProd,"\0")!=0)
+					   	  	 {
+					   	  	 	pos=0;
+					   	  	 	while(pos<TLP && stricmp(AuxProd,Produto[pos])!=0)
+					   	  	 			pos++;
+					   	  	 	
+					   	  	 	if(pos<TLP)  //Achou
+					   	  	 	{
+					   	  	 		printf("\n### Detalhes do Produto ###\n");
+					   	  	 		printf("Produto: %s",Produto[pos]);
+					   	  	 		printf("\nPreco: R$ %.2f",Preco[pos]);
+					   	  	 		printf("\nEstoque: %d\n",Estoque[pos]);
+					   	  	 		printf("\nAlterar Estoque (S/N)? ");
+					   	  	 		if (toupper(getche())=='S')
+					   	  	 		{
+					   	  	 			do
+					   	  	 			{
+					   	  	 				printf("\nNova qtde em Estoque: ");
+					   	  	 				scanf("%d",&Estoque[pos]);
+					   	  	 				if (Estoque[pos]<0)
+					   	  	 				  printf("\nDigite um valor MAIOR ou IGUAL a ZERO!\n");
+										}while(Estoque[pos] < 0);
+										
+					   	  	 			
+					   	  	 			printf("\nQtde do Produto [%s] Alterado!\n", AuxProd);
+					   	  	 		}
+					   	  	 	}
+					   	  	 	else
+					   	  	 		printf("\nProduto nao Cadastrado!\n");
+					   	  	 	
+								getch();
+								printf("\nAlterar Estoque do Produto: ");
+					   	  	 	fflush(stdin);
+					   	  	 	gets(AuxProd);
+					   	  	 }
+					   	  }
+			case 'F':
+				system("cls");
+				printf("\n### ORDENACAO DE PRODUTOS EM ESTOQUE ###\n");
 				if(TLP == 0){
-					printf("Nenhum produto cadastrado!");
+					printf("Nao ha produtos cadastrados!!!\n");
 					getch();
 				}
-				
 				else{
-					printf("\nInsira o nome do produto: ");
-					fflush(stdin);
-					gets(AuxProd);
 					
-					while(strcmp(AuxProd, "") != 0){
-					
-					pos = 0;
-					while(pos < TLP && stricmp(AuxProd, Produto[pos]) != 0)
-						pos ++;
-						
-					if(pos < TLP){
-						system("cls");
-						printf("\nProduto: %s", Produto[pos]);
-						printf("\nPreco: %.2fR$", Preco[pos]);
-						printf("\nEstoque: %d", Estoque[pos]);
-						printf("\nInsira outro produto: ");
-						gets(AuxProd);
-						}
-						
-					else{
-						printf("\nProduto nao encontrado!");
-						printf("\n Insira novamente um produto valido: ");
-						fflush(stdin);
-						gets(AuxProd);
-						}
-					}
 				}
 					   break;
-			
-			case 'D':
-				system("cls");
-				printf("\n### EXCLUSAO DE PRODUTOS ###\n");
-				
-				if (TLP == 0){
-					printf("Nao ha produtos para a exclusao\n");
-					getch();
-				}
-
-				else{
-				printf("\nInsira o produto a ser excluido: ");
-				fflush(stdin);
-				gets(AuxProd);	
-				
-				while(TLP != 0 && strcmp(AuxProd, "") != 0){
-					
-					pos = 0;
-					while(pos < TLP && stricmp(AuxProd, Produto[pos]) != 0)
-						pos ++;
-					
-					if(pos < TLP){
-						for(i=pos; i<TLP-1; i++){
-							Preco[i] = Preco[i+1];
-							strcpy(Produto[i], Produto[i+1]);
-							Estoque[i] = Estoque[i+1];
-						}
-						TLP --;
-						printf("\nInsira outro produto para exclusao: ");
-						fflush(stdin);
-						gets(AuxProd);
-					}
-					else{
-						printf("Produto nao encontrado\n");
-						printf("Insira um valor valido: ");
-						fflush(stdin);
-						gets(AuxProd);
-					}
+					   
+			case 'G':
+					   system("cls");
+					   printf("\n### CADASTRAR CLIENTES ###\n");
+					   if(TLC == TFC){
+							printf("Limite de clientes cadastrados atingidos!!!\n");
+							getch();
+					   }
+					   else{
+					   		printf("\nInsira o nome do [%d] cliente: ", TLC);
+					   		fflush(stdin);
+					   		gets(AuxCli);
+					   		while(TLC < TFC && strcmp(AuxCli, "") != 0){
+					   			
+					   			pos=0;
+					   			while(pos<TLC && strcmp(AuxCli, Cliente[pos]) != 0)
+					   				pos ++;
+					   				
+					   			if(pos == TLC){
+					   				strcpy(Cliente[pos], AuxCli);
+					   				TLC++;
+					   				printf("\nCadastro efetuado com sucesso!\n");
+					   				printf("Insira o proximo cliente: ");
+					   				fflush(stdin);
+					   				gets(AuxCli);
+					   				}
+					   				
+								else{
+									printf("\nCliente ja cadastrado!\n");
+									printf("Insira outro cliente: ");
+									fflush(stdin);
+									gets(AuxCli);
+								}	
+					   		}
+					   }
+					   break;
+					   
+			case 'H':
+			system("cls");
+			printf("\n### RELATORIO DE CLIENTES ###\n");
+			if(TLC == 0)
+				printf("Nao ha clientes cadastrados!!!\n");
+			else{
+				for(i=0; i<TLC; i++){
+					printf("\n--------------------------\n");
+					printf("\nCliente [%d] = %s\n", i, Cliente[i]);
 				}
 			}
-			
+			getch();	
 			break;
-			
-			case'E':
-				system("cls");
-				if(TLP == 0){
-					printf("Nao ha produtos cadastrados\n");
-					getch();
-				}
-				
-				else{
-				printf("\n### ALTERNAR ESTOQUE ###\n");
-				printf("\nInsira o produto a ter o estoque alterado: ");
-				fflush(stdin);
-				gets(AuxProd);
-				
-				while(strcmp(AuxProd, "") != 0){
-					
-					pos = 0;
-					while(pos < TLP && strcmp(AuxProd, Produto[pos]))
-						pos ++;
-					
-					if(pos < TLP){
-						printf("\nEstoque atual: %d\n", Estoque[pos]);
-						printf("Insira o novo estoque: ");
-						scanf("%d", &Estoque[pos]);
-						printf("\nInsira um novo produto para alteracao: ");
-						fflush(stdin);
-						gets(AuxProd);
-						}
-					}
-				}
-				
-			break;
-			
-			case'F':
-				system("cls");
-				printf("\n### ORDENACAO POR ESTOQUE ###\n");
-				if(TLP == 0){
-					printf("\nNao ha produtos cadastrados!");
-					getch();
-				}
-				else{
-					for(i=0; i<TLP-1; i++)
-						for(j=i+1; j<TLP; j++)
-							if(Estoque[i] < Estoque[j]){
-								
-								AuxEsto = Estoque[i];
-								Estoque[i] = Estoque[j];
-								Estoque[j] = AuxEsto;
-								
-								AuxPreco = Preco[i];
-								Preco[i] = Preco[j];
-								Preco[j] = AuxPreco;
-								
-								strcpy(AuxProd, Produto[i]);
-								strcpy(Produto[i], Produto[j]);
-								strcpy(Produto[j], AuxProd);
-							}
-				printf("\nOrdenacao efetuada com sucesso!");
-				getch();
-				}
-				
-			break;
-				
-			case 'G': 
-			printf("\nCadastrar Clientes:\n");
-					
-					   getch();
-					   break;
 					   
-			case 'H':  printf("\nRelatorio de Clientes:\n");
-					   getch();
-					   break;
-					   
+			case 'I':	for(i=0; i<TLC-1; i++)
+							for(j=i+1; j<TLC; j++)
+								if(strcmp(Cliente[i],Cliente[j])>0)
+								{
+									strcpy(AuxCli,Cliente[i]);
+									strcpy(Cliente[i],Cliente[j]);
+									strcpy(Cliente[j],AuxCli);
+								}
+						printf("\nClientes Ordenados com SUUUUCESSO!!\n");
+						getch();
+						break;
+			
 			case 'J':  printf("\nRealizar Vendas:\n");
 					   getch();
 					   break;
