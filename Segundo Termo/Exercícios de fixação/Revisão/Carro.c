@@ -76,15 +76,14 @@ int main(void)
 							        fflush(stdin);
 							        gets(AuxProd);
 								  }
-								  else
-								  	  {
+								  else{
 								  	  	printf("\nVetor de Produtos Cheio!\n");
 								  	  	getch();
 								  	  }
 							   }
 					   		}
 					   
-					   break;
+			break;
 					   
 			case 'B':
 			system("cls");
@@ -104,24 +103,22 @@ int main(void)
 					   
 			case 'C':
 			system("cls");
-			printf("\nConsultar Produtos:\n");
+			printf("\n### CONSULTA DE PRODUTO ###\n");
 				if (TLP==0){
 					   	  printf("\nNao ha Produtos!\n");
 					   	  getch();
 					   }
-					   else	
-					   	  {
+					   else	{
 					   	  	 printf("\nProduto a Consultar: ");
 					   	  	 fflush(stdin);
 					   	  	 gets(AuxProd);
-					   	  	 while (strcmp(AuxProd,"\0")!=0)
-					   	  	 {
+					   	  	 while (strcmp(AuxProd,"\0")!=0){
+					   	  	 	
 					   	  	 	pos=0;
 					   	  	 	while(pos<TLP && stricmp(AuxProd,Produto[pos])!=0)
 					   	  	 			pos++;
 					   	  	 	
-					   	  	 	if(pos<TLP)  //Achou
-					   	  	 	{
+					   	  	 	if(pos<TLP){
 					   	  	 		printf("\n### Detalhes do Produto ###\n");
 					   	  	 		printf("Produto: %s",Produto[pos]);
 					   	  	 		printf("\nPreco: R$ %.2f",Preco[pos]);
@@ -137,7 +134,7 @@ int main(void)
 					   	  	 }
 					   	  }
 					   
-					   break;
+			break;
 					   
 			case 'D': 
 			system("cls");
@@ -268,39 +265,39 @@ int main(void)
 					   
 			case 'G':
 			system("cls");
-					   printf("\n### CADASTRAR CLIENTES ###\n");
-					   if(TLC == TFC){
-							printf("Limite de clientes cadastrados atingidos!!!\n");
-							getch();
-					   }
-					   else{
-					   		printf("\nInsira o nome do [%d] cliente: ", TLC);
-					   		fflush(stdin);
-					   		gets(AuxCli);
-					   		while(TLC < TFC && strcmp(AuxCli, "") != 0){
-					   			
-					   			pos=0;
-					   			while(pos<TLC && strcmp(AuxCli, Cliente[pos]) != 0)
-					   				pos ++;
-					   				
-					   			if(pos == TLC){
-					   				strcpy(Cliente[pos], AuxCli);
-					   				TLC++;
-					   				printf("\nCadastro efetuado com sucesso!\n");
-					   				printf("Insira o proximo cliente: ");
-					   				fflush(stdin);
-					   				gets(AuxCli);
-					   				}
-					   				
-								else{
-									printf("\nCliente ja cadastrado!\n");
-									printf("Insira outro cliente: ");
-									fflush(stdin);
-									gets(AuxCli);
-								}	
-					   		}
-					   }
-					   break;
+			printf("\n### CADASTRAR CLIENTES ###\n");
+				if(TLC == TFC){
+					printf("Limite de clientes cadastrados atingidos!!!\n");
+					getch();
+					}
+						else{
+						   		printf("\nInsira o nome do [%d] cliente: ", TLC);
+						   		fflush(stdin);
+						   		gets(AuxCli);
+						   		while(TLC < TFC && strcmp(AuxCli, "") != 0){
+						   			
+						   			pos=0;
+						   			while(pos<TLC && strcmp(AuxCli, Cliente[pos]) != 0)
+						   				pos ++;
+						   				
+						   			if(pos == TLC){
+						   				strcpy(Cliente[pos], AuxCli);
+						   				TLC++;
+						   				printf("\nCadastro efetuado com sucesso!\n");
+						   				printf("Insira o proximo cliente: ");
+						   				fflush(stdin);
+						   				gets(AuxCli);
+						   				}
+						   				
+									else{
+										printf("\nCliente ja cadastrado!\n");
+										printf("Insira outro cliente: ");
+										fflush(stdin);
+										gets(AuxCli);
+									}	
+						   		}
+						   }
+						   break;
 					   
 			case 'H':
 			system("cls");
@@ -316,19 +313,58 @@ int main(void)
 			getch();	
 			break;
 					   
-			case 'I':	for(i=0; i<TLC-1; i++)
-							for(j=i+1; j<TLC; j++)
-								if(strcmp(Cliente[i],Cliente[j])>0)
-								{
-									strcpy(AuxCli,Cliente[i]);
-									strcpy(Cliente[i],Cliente[j]);
-									strcpy(Cliente[j],AuxCli);
-								}
+			case 'I':
+			system("cls");	
+			for(i=0; i<TLC-1; i++)
+				for(j=i+1; j<TLC; j++)
+					if(strcmp(Cliente[i],Cliente[j])>0){
+						strcpy(AuxCli,Cliente[i]);
+						strcpy(Cliente[i],Cliente[j]);
+						strcpy(Cliente[j],AuxCli);
+						}
 						printf("\nClientes Ordenados com SUUUUCESSO!!\n");
 						getch();
-						break;
+			break;
+						
+			case 'J':
+				system("cls");
+				printf("\n### EXCLUSAO DE CLIENTES ###\n");
+				if(TLC == 0){
+					printf("Nao ha clientes cadastrados!!!\n");
+					getch();
+				}
+				else{
+						
+					printf("\nInsira o nome do cliente: ");
+					fflush(stdin);
+					gets(AuxCli);
+					
+					while(TLC < TFC && strcmp(AuxCli, "") != 0){
+						
+						pos = 0;
+						while(pos < TLC && stricmp(AuxCli, Cliente[pos]) != 0)
+							pos++;
+						
+						if(pos == TLC){
+							printf("\nCliente nao encontrado!");
+							printf("\nInsira um cliente valido: ");
+							fflush(stdin);
+							gets(AuxCli);
+						}
+						else{
+							for(i = pos; i<TLC; i++)
+								strcpy(Cliente[i], Cliente[i+1]);
+							TLC--;
+							printf("\nExclusao efetuada com sucesso!");
+							printf("\nInsira outro cliente para exclusao: ");
+							fflush(stdin0;)
+							gets(AuxCli);
+						}
+					}
+				}
+			break;
 			
-			case 'J':  
+			case 'K':  
 			system("cls");
 			printf("\n### VENDAS ###\n");
 			if(TLC == 0 || TLP == 0){
@@ -371,6 +407,7 @@ int main(void)
 						
 						Vendas[TLV][2] = AuxEstoque;	
 						Estoque[pos] = Estoque[pos] - AuxEstoque;
+						TLV++;
 					}
 					printf("Insira outro cliente ou encerre o programa: ");
 					gets(AuxCli);
@@ -378,9 +415,28 @@ int main(void)
 			}
 			break;
 			
-			case 'K':  printf("\nExibir Vendas:\n");
-					   getch();
-					   break;
+			case 'L':
+			system("cls"); 
+			printf("\n### EXIBIR VENDAS ###\n");
+			if(TLV == 0){
+				printf("\nNao ha vendas registradas\n");
+				getch();
+			}
+			else{
+				j = -1;
+				for(i = 0; i < TLV; i++){
+					
+					pos = Vendas[i][0];
+					j++;
+					
+					if(Vendas[j][0] == pos)
+						printf("\nCLiente: %d\n", );
+					while(Vendas[j][0] == pos){
+						printf("Produto %d");
+					}
+				}
+			}
+
 		}
 		
 	}while (op != 27);  //ESC
