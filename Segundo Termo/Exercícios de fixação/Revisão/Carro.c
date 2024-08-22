@@ -11,7 +11,7 @@
 int main(void)
 {
 	char op, Produto[TFP][30], Cliente[TFC][30], AuxProd[30], AuxCli[30];
-	int i, j, pos, TLV=0, TLC=0, TLP=0, MatVendas[TFV][3], Estoque[TFP], AuxEstoque;
+	int i, j, pos, TLV=0, TLC=0, TLP=0, Vendas[TFV][3], Estoque[TFP], AuxEstoque;
 	float Preco[TFP], AuxPreco;
 	
 	
@@ -328,9 +328,55 @@ int main(void)
 						getch();
 						break;
 			
-			case 'J':  printf("\nRealizar Vendas:\n");
-					   getch();
-					   break;
+			case 'J':  
+			system("cls");
+			printf("\n### VENDAS ###\n");
+			if(TLC == 0 || TLP == 0){
+				printf("\nDados insuficiente para a venda!!!\n");
+				getch();
+			}
+			else{
+				printf("\nInsira o nome do cliente: ");
+				fflush(stdin);
+				gets(AuxCli);
+				
+				while(TLV < TFV && strcmp(AuxCli, "") != 0){
+					
+					pos = 0;
+					while(pos < TLC && stricmp(AuxCli, Cliente[pos]) != 0)
+						pos ++;	
+				
+					if(pos < TLC){
+						
+						Vendas[TLV][0] = pos;
+						
+						do{
+							printf("\nInsira o produto desejado pelo cliente: ");
+							gets(AuxProd);
+							pos = 0;
+							while(pos < TLP && stricmp(AuxProd, Produto[pos]) != 0)
+								pos++;
+							if(pos == TLP)
+								printf("\nProduto nao encontrado, insira um produto valido: ");
+						} while(pos == TLP);
+						
+						Vendas[TLV][1] = pos;
+						
+						do{
+							printf("\nInsira a quantidade desejada: ");
+							scanf("%d", &AuxEstoque);
+							if(AuxEstoque > Estoque[pos]);
+								printf("\nQuantidade maior que a em estoque, Insira outro valor: ");
+						}while(AuxEstoque <= Estoque[pos]);
+						
+						Vendas[TLV][2] = AuxEstoque;	
+						Estoque[pos] = Estoque[pos] - AuxEstoque;
+					}
+					printf("Insira outro cliente ou encerre o programa: ");
+					gets(AuxCli);
+				}
+			}
+			break;
 			
 			case 'K':  printf("\nExibir Vendas:\n");
 					   getch();
