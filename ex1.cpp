@@ -1,40 +1,33 @@
 #include <stdio.h>
-#include <conio.h>
 #include <stdlib.h>
+#include <conio.h>
 
-int le_numero(void){
-	int decimal;
-	printf("\nValor Decimal: ");
-	scanf("%d", &decimal);
-	
-	return decimal;
+int lenumero(void){
+    int Decimal;
+    printf("\nvalor decimal:");
+    scanf("%d",&Decimal);
+    return Decimal;
 }
-
-void exibe_numero(int valor){
-	printf("\nResultado: %d\n", valor);
-	getch();
+void ExibeNumero(int Valor){
+    printf("\nResultado:%d\n",Valor);
+    getch();
 }
-
-int converte_binario(int decimal){
-	int multi = 1, resul = 0, valor_binario;
-	
-	while(decimal > 1){
-		resul += decimal % 2 * multi;
-		decimal = decimal/2;
-		multi = multi * 10;
-	}
-	
-	resul += decimal * multi;
-	
-	return resul;
+int ConverteBinario(int Decimal){
+    int Binario=0, resultado,i=1,resto;
+    while(Decimal>0){
+        resultado=Decimal/2;
+        resto=Decimal%2;
+        resto=resto*i;
+        i=i*10;
+        Binario=Binario+resto;
+        Decimal=resultado;
+    }
+    return Binario;
 }
-
-int main (void){
-	int valor_dec, valor_binario, decimal;
-	
-	decimal = le_numero();
-	valor_binario = converte_binario(decimal);
-	exibe_numero(valor_binario);
-	
-	return 0;
+int main(void) {
+    int ValorDec,ValorBin;
+    ValorDec=lenumero();
+    ValorBin=ConverteBinario(ValorDec);
+    ExibeNumero(ValorBin);
+    return 0;
 }
