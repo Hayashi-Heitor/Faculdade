@@ -1,0 +1,68 @@
+*{
+       font-family: Verdana, Geneva, Tahoma, sans-serif;
+       font-size:17px;
+       color:darkblue;
+       line-height:30px;
+}
+
+.titulo{
+       font-family: arial;
+       font-size:30px;
+       color: black;
+       background-color: orange;
+       text-transform:uppercase;
+       letter-spacing: 10px;
+       text-shadow:8px 2px 5px grey;
+}
+
+.sub_titulo{
+       font-family: Arial, Helvetica, sans-serif;
+       font-size: 25px;
+       color: black;
+       text-transform: uppercase;
+       letter-spacing: 5px;
+       margin-top: 50px;
+       margin-bottom: 5px;
+}
+
+.sub_titulo2{
+       font-family: Arial, Helvetica, sans-serif;
+       font-size: 20px;
+       color: black;
+       text-transform: uppercase;
+       letter-spacing: 5px;
+       margin-top: 25px;
+       margin-bottom: 5px;
+}
+
+.fundo{
+       background-color:#ffffcc;
+       margin:10px 20px 30px 50px;
+}
+
+.fipp{
+       background-color: green;font-size:20px;
+       color:orange;
+}
+
+.centro{
+       text-align: center;
+}
+
+.negrito{
+       font-weight: bold;
+}
+
+.sublinha{
+       text-decoration: underline overline;
+}
+
+.justifica{
+       text-align: justify;
+}
+
+.diferente{
+       background-color: pink;
+       padding: 15px;
+       box-shadow:3px 3px 125px blue;
+}
