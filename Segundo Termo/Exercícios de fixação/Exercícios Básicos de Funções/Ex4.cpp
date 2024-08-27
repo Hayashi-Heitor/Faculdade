@@ -12,7 +12,7 @@ int recebe (void){
 	scanf("%d %d %d", &h2, &m2, &s2);
 	
 	resul = h2 - h1;
-	m2 += resul * 24;
+	m2 += resul * 60;
 	resul = m2 - m1;
 	s2 = resul * 60;
 	resul = s2 - s1;
