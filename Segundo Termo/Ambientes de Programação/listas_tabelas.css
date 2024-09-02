@@ -1,0 +1,52 @@
+*{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#Lista1{
+    width: 600px;
+    margin: 0 0 0 45%;
+}
+
+.centro-texto{
+    text-align: center;
+}
+
+.borda{
+    border: 2px solid black;
+}
+
+.centro{
+    width:700px;
+    margin: 12px 0 20px 33%;
+    text-align:center;
+}
+
+td, tr{
+    border: 2px solid black;
+    font-weight: bold;
+}
+
+.negrito{
+    font-weight: bold;
+}
+
+.cinza{
+    background-color: gray;
+}
+
+.azul{
+    background-color: aqua;
+}
+
+.bisque{
+    background-color: bisque;
+}
+
+.rodape{
+    width:700px;
+    margin: 12px 0 20px 33%;
+    font-size: 25px;
+    border: 0px;
+    background-color: aqua;
+    font-weight: initial;
+}
