@@ -28,11 +28,22 @@ char menu (void){
 	return toupper(getch());
 }
 
-
+int busca_nome(TPagenda ag[TF], int TL, char nome[30]){
+	int pos = 0;
+	
+	while(pos < TL && stricmp(nome, ag[pos].nome) != 0)
+		pos++;
+	
+	if(pos < TL)
+		return pos;
+	else
+		return -1;
+}
 
 void cad_agenda (TPagenda tab_ag[TF], int &TL){
 	char aux_nome[30];
 	
+	setlocale(LC_ALL, "portuguese");
 	system("cls"); 
 	printf("\n### CADASTRO DE PESSOAS ###\n");
 	printf("\nNome: ");
@@ -72,21 +83,82 @@ void rel_agenda (TPagenda tab_ag[TF], int qtd){
 void ordenar (TPagenda tab_ag[TF], int TL){
 	TPagenda reg;
 	int i, j;
+	setlocale(LC_ALL, "portuguese");
+	
 	if(TL == 0)
-		printf("\nNão há dados)
+		printf("\nNão há dados");
 	else{
 		for(i = 0; i < TL-1; i++)
 			for(j = 0; j<TL; j++)
 				if(stricmp(tab_ag[i].nome, tab_ag[j].nome) > 0){
 					reg = tab_ag[i];
 					tab_ag[i] = tab_ag[j];
-					tab[j] = reg;
+					tab_ag[j] = reg;
 				}
 		printf("\nAgenda ordenada\n");
 	}
 	getch();
 }
 
+void consulta(TPagenda tab_ag[TF],int TL){
+	int pos;
+	char aux_nome[30];
+	
+	setlocale(LC_ALL, "portuguese");
+	system("cls");
+	printf("\n### CONSULTA POR NOME ###\n");
+	printf("\nInforme o nome: ");
+	fflush(stdin);
+	gets(aux_nome);
+	
+	while(strcmp(aux_nome, "\0") != 0){
+		pos = busca_nome(tab_ag, TL, aux_nome);
+		if(pos == -1)
+			printf("O nome não foi encontrado!");
+		else{
+			system("cls");
+			printf("\nDados da pessoa:\n");
+			printf("\nNome: %s", tab_ag[pos].nome);
+			printf("\nEndereço: %s", tab_ag[pos].endereco);
+			printf("\nTelefone: %s\n", tab_ag[pos].fone);
+			getch();
+			system("cls");
+			printf("\nNome a consultar: ");
+			fflush(stdin);
+			gets(aux_nome);
+		}
+	}
+		getch();
+}
+
+void excluir(TPagenda ag[30],int &TL){
+	char aux_nome[30];
+	int pos;
+	
+	system("cls");
+	setlocale(LC_ALL, "portuguese");
+	printf("\n### EXCLUSÃO ###\n");
+	printf("\nInforme o valor a ser excluido: ");
+	fflush(stdin);
+	gets(aux_nome);
+	
+	while(strcmp(aux_nome, "\0") != 0){
+		pos = busca_nome(ag, TL, aux_nome);
+		if(pos == -1)
+			printf("Nome não encontrado!!\n");
+		else{
+			for(; pos < TL-1; pos++){
+				ag[pos] = ag[pos+1];
+			}
+			TL--;
+			printf("Exclusão efetuada com sucesso!");
+			printf("\nInforme o valor a ser excluido: ");
+			fflush(stdin);
+			gets(aux_nome);
+		}
+		getch();
+	}
+}
 void executar(void){
 	TPagenda ag[TF];
 	char op;
@@ -98,7 +170,11 @@ void executar(void){
 				break;
 			case 'B': rel_agenda(ag, TLAG);
 				break;
-			case 'C': 
+			case 'C': ordenar(ag, TLAG);
+				break;
+			case 'D': consulta(ag, TLAG);
+				break;
+			case 'E': excluir(ag, TLAG);
 		}
 	}while(menu() != 27);
 }
