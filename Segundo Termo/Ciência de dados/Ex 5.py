@@ -10,4 +10,4 @@ if cve in df.columns:
   print(f"Vendas na Europa: {jme[cve]} milhões")
 
 else:
-  print(f"A coluna '{cve}' não foi encontrada. Verifique os nomes das colunas.")
+  print(f"A coluna {cve} não foi encontrada. Verifique os nomes das colunas.")
