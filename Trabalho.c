@@ -67,9 +67,9 @@ int nav (void){
 		}
 		else{
 			if(pos >= 14)
-				gotoxy(40, pos);
+				gotoxy(40, --pos);
 			if(pos <= 8)
-				gotoxy(40, pos);
+				gotoxy(40, ++pos);
 		}
 	}while (op != 27);
 }
