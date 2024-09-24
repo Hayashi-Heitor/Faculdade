@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Participe! - Maratona SBC de Programação</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="img/logos/portfolio_ico.png" type="image/x-icon">
+</head>
+<body>
+    <!-- INICIO SITE-->
+    <header id="cabecalho">
+        <div class="header_container">
+            <img src="img/logos/logo1.jpeg" alt="Logo 1" class="header_image">
+            <h1>Maratona SBC de Programação</h1>
+            <img src="img/logos/logo2.png" alt="Logo 2" class="header_image">
+        </div>
+    </header>
+
+    <!-- Seção de navegação -->
+    <nav id="menu">
+        <ul id="lista_menu">
+            <li><a href="inicio.html">Início</a></li>
+            <li><a href="maratonas.html">Maratonas</a></li>
+            <li><a href="participe.html">Participe!</a></li>
+            <li><a href="portfolios.html">Portfólios</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="questao.html">Teste seus conhecimentos</a></li>
+        </ul>
+    </nav>
+    <!-- FIM DA SEÇÃO DE NAVEGAÇÃO-->
+
+    <!-- INÍCIO DO MAIN DA PÁGINA PARTICIPE! -->
+    <main>
+        <h1 class="titulo_port">Participe!</h1>
+        <br/>
+        <div class="container-participe">
+            <!-- Container da esquerda: lista de motivos e imagem -->
+            <div class="container-esquerda">
+                <h2>Por que participar das maratonas de programação?</h2>
+                <ul>                    
+                    <br/><li><strong>Aprendizado Rápido:</strong> Absorva novas tecnologias e conceitos rapidamente.</li>
+                    <br/><li><strong>Networking:</strong> Conecte-se com pessoas da área e crie novas oportunidades.</li>
+                    <br/><li><strong>Desenvolvimento de Habilidades:</strong> Aprimore suas habilidades de trabalho em equipe.</li>
+                    <br/><li><strong>Criatividade e Inovação:</strong> Tenha liberdade para testar ideias e soluções únicas.</li>
+                    <br/><li><strong>Reconhecimento e Premiações:</strong> Ganhe visibilidade e prêmios.</li>
+                    <br/><li><strong>Construir um Portfólio:</strong> Crie projetos reais para adicionar ao seu portfólio.</li>
+                    <br/><li><strong>Experiência Prática:</strong> Coloque em prática os conhecimentos teóricos aprendidos.</li>
+                </ul>
+                <img src="img/porque-participar/maratonaXVII.jpg" alt="Final Nacional Maratona SBC 2012" class="corpo-imagem">
+            </div>
+
+            <!-- Container da direita: formulário de inscrição -->
+            <div class="container-direita">
+                <h2>Inscreva-se agora!</h2>
+                <form class="form-inscricao" action="#" method="POST" onsubmit="exibirMensagem()">
+                    <!-- Nome da Equipe -->
+                    <div class="form-group">
+                        <label for="nomeEquipe">Nome da Equipe:</label>
+                        <input type="text" id="nomeEquipe" name="nomeEquipe" required>
+                    </div>
+
+                    <!-- Nome do Líder -->
+                    <div class="form-group">
+                        <label for="nomeLider">Nome do Líder:</label>
+                        <input type="text" id="nomeLider" name="nomeLider" required>
+                    </div>
+
+                    <!-- E-mail -->
+                    <div class="form-group">
+                        <label for="email">E-mail:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <!-- Telefone -->
+                    <div class="form-group">
+                        <label for="telefone">Telefone:</label>
+                        <input type="tel" id="telefone" name="telefone" placeholder="(XX)XXXXX-XXXX" pattern="^\(\d{2}\)\d{5}-\d{4}$" required>
+                    </div>
+
+                    <!-- Redes Sociais -->
+                    <div class="form-group">
+                        <label for="redesSociais">Redes Sociais (Links):</label>
+                        <textarea id="redesSociais" name="redesSociais" rows="3" placeholder="Insira os links separados por vírgula" style="resize: none;"></textarea>
+                    </div>
+
+                    <!-- Universidade -->
+                    <div class="form-group">
+                        <label for="universidade">Universidade:</label>
+                        <input type="text" id="universidade" name="universidade">
+                    </div>
+
+                    <!-- Cidade -->
+                    <div class="form-group">
+                        <label for="cidade">Cidade:</label>
+                        <input type="text" id="cidade" name="cidade" required>
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="form-group">
+                        <label for="estado">Estado:</label>
+                        <select name="estado" id="estado" required>
+                            <option value="">Selecione o estado</option>
+                            <option value="AC">AC</option>
+                            <option value="AL">AL</option>
+                            <option value="AP">AP</option>
+                            <option value="AM">AM</option>
+                            <option value="BA">BA</option>
+                            <option value="CE">CE</option>
+                            <option value="DF">DF</option>
+                            <option value="ES">ES</option>
+                            <option value="GO">GO</option>
+                            <option value="MA">MA</option>
+                            <option value="MT">MT</option>
+                            <option value="MS">MS</option>
+                            <option value="MG">MG</option>
+                            <option value="PA">PA</option>
+                            <option value="PB">PB</option>
+                            <option value="PR">PR</option>
+                            <option value="PE">PE</option>
+                            <option value="PI">PI</option>
+                            <option value="RJ">RJ</option>
+                            <option value="RN">RN</option>
+                            <option value="RS">RS</option>
+                            <option value="RO">RO</option>
+                            <option value="RR">RR</option>
+                            <option value="SC">SC</option>
+                            <option value="SP">SP</option>
+                            <option value="SE">SE</option>
+                            <option value="TO">TO</option>
+                        </select>
+                    </div>
+
+                    <!-- Integrantes -->
+                    <div class="form-group">
+                        <label for="integrantes">Nome dos Integrantes:</label>
+                        <textarea id="integrantes" name="integrantes" rows="5" placeholder="Insira os nomes dos integrantes separados por vírgula" required style="resize: none;"></textarea>
+                    </div>
+
+                    <!-- Tipo de Maratona -->
+                    <div class="form-group">
+                        <label>Tipo de Maratona:</label>
+                        <select name="tipoMaratona" id="tipoMaratona" required>
+                            <option value="regional">Regional</option>
+                            <option value="nacional">Nacional</option>
+                            <option value="internacional">Internacional</option>
+                        </select>
+                    </div>
+
+                    <!-- Termos e Condições -->
+                    <div class="form-group termos-condicoes">
+                        <input type="checkbox" id="termos" name="termos" required>
+                        <label for="termos">Concordo com os termos e condições</label>                
+                    </div>
+
+                    <!-- Botão de envio -->
+                    <div class="form-group">
+                        <button type="submit">Enviar Inscrição</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <!-- FIM DO MAIN DA PÁGINA PARTICIPE! -->
+
+    <footer id="rodape">
+        <div id="logorodape">
+            <img src="img/logos/fipp.png" alt="Logo Fipp" class="imagem_logo">
+        </div>
+    </footer>
+    <!-- FIM DO RODAPÉ-->
+
+    <script>
+        function exibirMensagem() {
+            alert("Equipe inscrita com sucesso!");
+        }
+    </script>
+</body>
+</html>
