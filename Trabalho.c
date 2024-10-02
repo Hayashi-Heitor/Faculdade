@@ -1,69 +1,193 @@
-#include<iostream>
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<ctype.h>
-#include<locale.h>
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio2.h>
+#include <string.h>
 
 //#include "meuconio.h"
-#include <conio2.h>
 
 #define TF 100
 
 struct _Aluno {
-	char nome[30], RA[30];
+	char ra[10];
+	char nome[30];
 };
 
-struct _Disciplina {
-	int codDisc;
-	char nomeDisc[30];
+struct _Disc {
+	int cod;
+	char nome[30];
 };
 
 struct _Nota {
-	int nota;
-	char RA[30];
-	int codDisc;
+	char ra[10];
+	int cod;
+	float nota;
 };
 
-//buscas
-int BuscaRA(_Aluno aluno[TF], char auxRA[30], int TL) {
+//busca, cadastro, exclusão e alteração de alunos
+
+int BuscaAluno(_Aluno aluno[], char auxRa[10], int TL) {
 	int pos=0;
 	
-	while(pos < TL && strcmp(aluno[pos].RA, auxRA)!=0)
+	while(pos<TL && strcmp(aluno[pos].ra, auxRa)!=0)
+		pos++;
+		
+	if(pos==TL)
+		return -1;
+	else
+		return pos;
+}
+
+void CadastroAluno(_Aluno aluno[], int &TL) {
+	char auxRa[30];
+	
+	system("cls");
+	textcolor(14);
+	printf("\n### CADASTRO DE ALUNOS ###\n");
+	printf("\nInsira o RA do aluno: ");
+	fflush(stdin);
+	gets(auxRa);
+	
+	while(TL<TF && strcmp(auxRa, "\0")!=0) {
+		if (BuscaAluno(aluno, auxRa, TL) < 0) {
+			strcpy(aluno[TL].ra, auxRa);
+			printf("\nInsira o nome do aluno: ");
+			fflush(stdin);
+			gets(aluno[TL].nome);
+			
+			printf("\n Aluno: %s CADASTRADO COM SUCESSO!\n", aluno[TL++].nome);
+			getch();
+		}
+		else {
+			printf("\n*** ALUNO JA CADASTRADO ***\n");
+			getch();
+		}
+		
+		system("cls");
+		printf("\nInsira o RA do aluno: ");
+		fflush(stdin);
+		gets(auxRa);
+	}
+	
+	printf("\n### CADASTRO FINALIZADO ###\n");
+	getch();
+}
+
+//busca, cadastro, exclusão e alteração de disciplinas
+
+int BuscaDisciplina(_Disc disc[], int auxCodDisc, int TL) {
+	int pos = 0;
+	
+	while (pos<TL && disc[pos].cod != auxCodDisc)
 		pos++;
 	
+	if (pos == TL)
+		return -1;
+	else
+		return pos;
+}
+
+void CadastroDisciplina(_Disc disc[], int &TL) {
+	int auxCodDisc;
+	
+	system("cls");
+	textcolor(14);
+	printf("\n### CADASTRO DE DISCIPLINAS ###\n");
+	printf("\nInsira o codigo da disciplina ou 0 para sair: ");
+	scanf("%d", &auxCodDisc);
+	
+	while (TL<TF && auxCodDisc != 0) {
+		if (BuscaDisciplina(disc, auxCodDisc, TL) < 0) {
+			disc[TL].cod = auxCodDisc;
+			printf("\nInsira o nome da disciplina: ");
+			fflush(stdin);
+			gets(disc[TL].nome);
+			
+			printf("\nDisciplina %s cadastrada com sucesso!\n", disc[TL++].nome);
+			getch();
+		}
+		else {
+			printf("\n*** DISCIPLINA JA CADASTRADA ***\n");
+			getch();
+		}
+		
+		system("cls");
+		printf("\nInsira o codigo da disciplina ou 0 para sair: ");
+		scanf("%d", &auxCodDisc);
+	}
+	
+	printf("\n### CADASTRO FINALIZADO ###\n");
+	getch();
+}
+
+//busca, cadastro, exclusão e alteração de notas
+
+int BuscaNota(_Nota nota[], char auxRa[10], int auxCodDisc, int TL) {
+	int pos=0;
+	
+	while (pos<TL && (strcmp(nota[pos].ra, auxRa)!=0 || nota[pos].cod != auxCodDisc))
+		pos++;
+		
 	if(pos == TL)
 		return -1;
 	else
 		return pos;
 }
 
-int BuscaCodDisc(_Disciplina disc[TF], int auxCodDisc, int TL) {
-	int pos=0;
+void CadastroNota(_Nota nota[], _Aluno aluno[], _Disc disc[], int TLA, int TLD, int &TL) {
+	int auxCodDisc, posAluno, posDisc;
+	char auxRa[10];
 	
-	while(pos < TL && auxCodDisc != disc[pos].codDisc)
-		pos++;
+	system("cls");
+	textcolor(14);
+	printf("\n### CADASTRO DE NOTAS ###\n");
+	printf("\nInsira o RA do aluno: ");
+	fflush(stdin);
+	gets(auxRa);
+	
+	while (TL<TF && strcmp(auxRa, "\0")!=0) {
+		posAluno = BuscaAluno(aluno, auxRa, TLA);
 		
-	if (pos == TL)
-		return -1;
-	else 
-		return pos;
+		if (posAluno >= 0) {
+			printf("\nInsira o codigo da disciplina: ");
+			scanf("%d", &auxCodDisc);
+			posDisc = BuscaDisciplina(disc, auxCodDisc, TLD);
+			
+			if(posDisc >= 0) {
+				if (BuscaNota(nota, auxRa, auxCodDisc, TL) < 0) {
+					strcpy(nota[TL].ra, auxRa);
+					nota[TL].cod = auxCodDisc;
+					printf("\nInsira a nota do aluno: ");
+					scanf("%f", &nota[TL].nota);
+					
+					printf("\nAluno: %s\t Disciplina: %s\t Nota: %.2f\n", aluno[posAluno].nome, disc[posDisc].nome, nota[TL++].nota);
+					getch();
+				}
+				else {
+					printf("\n*** NOTA JA CADASTRADA ***");
+					getch();
+				}
+			}
+			else {
+				printf("\n*** CODIGO DA DISCIPLINA NAO ECONTRADO ***");
+				getch();
+			}
+		}
+		else {
+			printf("\n*** RA NAO ENCONTRADO ***\n");
+			getch();
+		}
+		
+		system("cls");
+		printf("\nInsira o RA do aluno: ");
+		fflush(stdin);
+		gets(auxRa);
+	}
+	
+	printf("\n### CADASTRO FINALIZADO ###\n");
+	getch();
 }
 
-int BuscaNota(_Nota nota[TF], char auxRA[30], int auxCodDisc, int TL) {
-	int pos=0;
-	
-	while (pos < TL && strcmp(nota[pos].RA, auxRA)!=0 || nota[pos].codDisc != auxCodDisc)
-		pos++;
-		
-	if (pos == TL)
-		return -1;
-	else
-		return pos;
-}
-
-
-//Base da moldura do menu principal
 void moldura(int ci, int li, int cf, int lf,int cor_tex,int cor_fun){
 	textcolor(cor_tex);
 	textbackground(cor_fun);
@@ -87,132 +211,64 @@ void moldura(int ci, int li, int cf, int lf,int cor_tex,int cor_fun){
 //painel montado do menu principal
 void painel_principal(void){
 	clrscr();
-	moldura(30, 3, 80, 25, 15, 0);
+	moldura(30, 3, 80, 25, 0, 15);
+	moldura(31, 4, 79, 6, 15, 0);
+	moldura(47, 9, 61, 11, 14, 0);
+	moldura(47, 18, 61, 20, 12, 0);
 	textcolor(15);
-	gotoxy(32, 4);
-	printf("################ MENU PRINCIPAL ###############");
-	gotoxy(39, 8);
+	gotoxy(49, 5); printf("MENU PRINCIPAL");
+	gotoxy(48, 10); textcolor(14); printf("[ ]CADASTROS");
+	gotoxy(48, 13); textcolor(11); printf("[ ]teste");
+	gotoxy(48, 16); textcolor(10); printf("[ ]teste");
+	gotoxy(48, 19); textcolor(12); printf("[ ]ENCERRAR");
+}
+
+void painel_cadastro(void){
+	system("cls");
+	moldura(30, 3, 80, 25, 0, 14);
+	moldura(31, 4, 79, 6, 14, 0);
+	moldura(47, 9, 61, 11, 14, 0);
+	moldura(47, 12, 61, 14, 14, 0);
+	moldura(47, 15, 61, 17, 14, 0);
+	moldura(47, 18, 61, 20, 15, 0);
 	textcolor(14);
-	printf("[ ]Cadastro de alunos");
-	gotoxy(39, 10);
-	textcolor(11);
-	printf("[ ]Cadastro de disciplina");
-	textcolor(10);
-	gotoxy(39, 12);
-	printf("[ ]Cadastro de notas");
-	gotoxy(39, 14);
-	textcolor(12);
-	printf("[ ]Encerrar o programa");
+	gotoxy(49, 5); printf("MENU CADASTRO");
+	gotoxy(48, 10); textcolor(14); printf("[ ]ALUNO");
+	gotoxy(48, 13); printf("[ ]DISCIPLINA");
+	gotoxy(48, 16); printf("[ ]NOTA");
+	gotoxy(48, 19); textcolor(15); printf("[ ]VOLTAR");
 }
 
-void LeAluno (_Aluno aluno[TF], int &TL) {
-	char auxRA[30];
-	system("cls");
-	textcolor(14);
-	printf("\n##CADASTRO DE ALUNOS##\n");
-	printf("\nInsira o RA do aluno: ");
-	fflush(stdin);
-	gets(auxRA);
-	
-	while(TL<TF && strcmp(auxRA, "\0")!=0) {
-		if (BuscaRA(aluno, auxRA, TL) < 0) {
-			strcpy(aluno[TL].RA, auxRA);
-			printf("\nInsira o nome do aluno: ");
-			fflush(stdin);
-			gets(aluno[TL++].nome);
-			
-			printf("\n## Aluno [%d], %s - cadastrado com sucesso!! ##\n", TL, aluno[TL-1].nome);
-		}
-		else 
-			printf("\nRA ja cadastrado!!\n");
-			
-		
-		if(TL == TF)
-			printf("\nCadastro de alunos cheio!!");
-		else {
-			printf("\nInsira o RA do aluno: ");
-			fflush(stdin);
-			gets(auxRA);
-		}
-	}
-	printf("\n**CADASTRO FINALIZADO**\n");
-	getch();
-}
-
-void LeDisciplina (_Disciplina disc[TF], int &TL) {
-	int auxCod;
-	system("cls");
-	textcolor(11);
-	printf("\n##CADASTRO DE DISCIPLINAS##\n");
-	printf("\nInsira o codigo da disciplina: ");
-	scanf("%d",&auxCod);
-	while(TL<TF && auxCod > 0) {
-		if(BuscaCodDisc(disc, auxCod, TL) < 0) {
-			disc[TL].codDisc = auxCod;
-			printf("\nInsira o nome da disciplina: ");
-			fflush(stdin);
-			gets(disc[TL++].nomeDisc);
-		}
-		else
-			printf("\nDisciplina ja cadastrada!!\n");
-		
-		
-		if (TL == TF)
-			printf("\nCadastro de disciplinas cheio!!");
-		else {
-			printf("\nInsira o codigo da disciplina (ou 0 para sair): ");
-			scanf("%d",&auxCod);
-		}
-	}
-	printf("\n**CADASTRO FINALIZADO**\n");
-	getch();
-}
-
-void LeNota(_Nota nota[TF], int &TL) {
-	char auxRA[30];
-	int auxCodDisc;
-	
-	system("cls");
-	textcolor(10);
-	printf("\n##CADASTRO DE NOTAS##\n");
-	printf("\nInsira o RA do aluno: ");
-	fflush(stdin);
-	gets(auxRA);
-	while(TL < TF && strcmp(auxRA, "\0")!=0) {
-		printf("\nInsira o Codigo da disciplina: ");
-		scanf("%d", &auxCodDisc);
-		if (BuscaNota(nota, auxRA, auxCodDisc, TL) < 0) {
-			strcpy(nota[TL].RA, auxRA);
-			nota[TL++].codDisc = auxCodDisc;
-		}
-		else
-			printf("\nJa existe!");
-		
-		if (TL == TF) 
-			printf("\nCadastro de notas cheio!!");
-		else {
-			printf("\nInsira o RA do aluno: ");
-			fflush(stdin);
-			gets(auxRA);	
-		}
-	}
-	printf("\n**CADASTRO FINALIZADO**\n");
-	getch();
-}
-
-//sistema de navegação no menu
 int nav (void){
 	char op;
-	int pos = 14;
+	int pos = 19;
 	
 	do{
 		textcolor(0);
 		op = toupper(getche());
-			if(op == 'W' && pos != 8)
-				pos -= 2;
-			else if(op == 'S' && pos != 14)
-				pos += 2;
-			gotoxy(40, pos);
+			if(op == 'W' && pos != 10)
+				pos -= 3;
+			else if(op == 'S' && pos != 19)
+				pos += 3;
+			gotoxy(49, pos);
+
+	}while (op != 13);
+	
+	return pos; //volta o valor de Y
+}
+
+int nav_cad (void){
+	char op;
+	int pos = 19;
+	
+	do{
+		textcolor(0);
+		op = toupper(getche());
+			if(op == 'W' && pos != 10)
+				pos -= 3;
+			else if(op == 'S' && pos != 19)
+				pos += 3;
+			gotoxy(49, pos);
 
 	}while (op != 13);
 	
@@ -220,23 +276,39 @@ int nav (void){
 }
 
 void operacao (void){
-	_Nota nota[TF];
 	_Aluno aluno[TF];
-	_Disciplina disc[TF];
-	int TLA = 0, TLD = 0, TLN = 0, pos;
+	_Disc disc[TF];
+	_Nota nota[TF];
+	int TLA=0, TLD=0, TLN=0, pos, pos_cad;
 	
 	do{
 		painel_principal();
 		pos = nav();
 		switch(pos){
-			case 8: LeAluno(aluno, TLA); break;
-			case 10: LeDisciplina(disc, TLD); break;
-			case 12: LeNota(nota, TLN);
+			case 10: 
+				do{
+					painel_cadastro();
+					pos_cad = nav_cad();
+					switch (pos_cad){
+						case 10: CadastroAluno(aluno, TLA);
+							break;
+						case 13: CadastroDisciplina(disc, TLD);
+							break;
+						case 16: CadastroNota(nota, aluno, disc, TLA, TLD, TLN);
+				}
+				}while(pos_cad != 19);
+			break;
+			case 13: CadastroDisciplina(disc, TLD); break;
+			case 16: CadastroNota(nota, aluno, disc, TLA, TLD, TLN);
 		}
-	}while(pos != 14);
+	}while(pos != 19);
+	system("cls");
+	textcolor(15);
 }
 
-int main (int argc, char** argv){
+
+
+int main(int argc, char** argv) {
 	
 	operacao();
 	
