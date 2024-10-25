@@ -8,6 +8,23 @@ struct TPaluno{
 	int ano_nasc; 
 };
 
+int busca_aluno_ra(FILE *PTRaluno, char chave_ra[14]){ //exaustiva em arquivo
+	TPaluno r;
+	
+	rewind(PTRaluno);
+	//fseek(PTRaluno, 0, 0);
+	
+	fread(&r, sizeof(TPaluno), 1, PTRaluno);
+	while(!feof(PTRaluno) && strcmp(chave_ra, r.ra) != 0)
+		fread(&r, sizeof(TPaluno), 1, PTRaluno);
+	
+	if(strcmp(chave_ra, r.ra) == 0)
+		return ftell(PTRaluno) - sizeof(TPaluno);
+	else
+		return -1;
+	
+}
+
 void gravar_aluno(void){
 	TPaluno reg;
 	
@@ -58,9 +75,47 @@ void exibir_aluno(void){
 	getche();
 }
 
+void consultar_aluno(void){
+	TPaluno RAluno;
+	int pos;
+	
+	FILE *PTRaluno = fopen("Alunos.dat", "rb");
+	clrscr();
+	printf("\n## Consultar por R.A ##\n");
+	
+	if(PTRaluno == NULL)
+		printf("\nErro de Abertura");
+		
+	else{
+		printf("\nR.A a Consultar: ");
+		fflush(stdin);
+		gets(RAluno.ra);
+		
+		while(strcmp(RAluno.ra, "\0") != 0){
+			pos = busca_aluno_ra(PTRaluno, RAluno.ra);
+			
+			if(pos == -1)
+				printf("\nR.A nao cadastrado!\n");
+				
+			else{
+				printf("\n*** Dados Encontrados ***\n");
+				printf("R.A: %s\n", RAluno.ra);
+				printf("Nome: %s\n", RAluno.nome);
+				printf("Ano nasc: %d\n", RAluno.ano_nasc);
+			}
+			
+			printf("\nR.A a Consultar: ");
+			fflush(stdin);
+			gets(RAluno.ra);
+		}
+		
+		fclose(PTRaluno);
+	}
+	getche();
+}
+
 int main (void){
 	
-	gravar_aluno();
-	exibir_aluno();
+	consultar_aluno();
 	return 0;
 }
