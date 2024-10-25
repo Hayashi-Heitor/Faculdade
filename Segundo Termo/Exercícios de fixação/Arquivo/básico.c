@@ -98,6 +98,7 @@ void consultar_aluno(void){
 				printf("\nR.A nao cadastrado!\n");
 				
 			else{
+				fseek(PTRaluno, pos, 0);
 				printf("\n*** Dados Encontrados ***\n");
 				printf("R.A: %s\n", RAluno.ra);
 				printf("Nome: %s\n", RAluno.nome);
