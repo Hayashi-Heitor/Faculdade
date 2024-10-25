@@ -2,6 +2,7 @@
 #include <conio2.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 struct TPaluno{
 	char ra[14], nome[30];
@@ -99,6 +100,7 @@ void consultar_aluno(void){
 				
 			else{
 				fseek(PTRaluno, pos, 0);
+				fread(&RAluno, sizeof(TPaluno), 1, PTRaluno);
 				printf("\n*** Dados Encontrados ***\n");
 				printf("R.A: %s\n", RAluno.ra);
 				printf("Nome: %s\n", RAluno.nome);
@@ -115,8 +117,61 @@ void consultar_aluno(void){
 	getche();
 }
 
-int main (void){
+void alterar_aluno(void){
+	TPaluno RAluno;
+	int pos;
 	
+	FILE *PTRaluno = fopen("Alunos.dat", "rb+");
+	clrscr();
+	printf("\n## Consultar por R.A ##\n");
+	
+	if(PTRaluno == NULL)
+		printf("\nErro de Abertura");
+		
+	else{
+		printf("\nR.A a Alterar: ");
+		fflush(stdin);
+		gets(RAluno.ra);
+		
+		while(strcmp(RAluno.ra, "\0") != 0){
+			pos = busca_aluno_ra(PTRaluno, RAluno.ra);
+			
+			if(pos == -1)
+				printf("\nR.A nao cadastrado!\n");
+				
+			else{
+				fseek(PTRaluno, pos, 0);
+				fread(&RAluno, sizeof(TPaluno), 1, PTRaluno);
+				printf("\n*** Dados Encontrados ***\n");
+				printf("R.A: %s\n", RAluno.ra);
+				printf("Nome: %s\n", RAluno.nome);
+				printf("Ano nasc: %d\n", RAluno.ano_nasc);
+				
+				printf("\nDeseja Alterar (S/N)?");
+				if(toupper(getche()) == 'S'){
+					printf("\nNovo nome: ");
+					fflush(stdin);
+					gets(RAluno.nome);
+					printf("\nNovo Ano nasc: ");
+					scanf("%d", &RAluno.ano_nasc);
+					fseek(PTRaluno, pos, 0);
+					fwrite(&RAluno, sizeof(TPaluno), 1, PTRaluno);
+					printf("\nRegistro Atualizado com sucesso");
+				}
+			}
+			printf("\nR.A a Alterar: ");
+			fflush(stdin);
+			gets(RAluno.ra);
+		}
+		fclose(PTRaluno);
+	}
+	getche();
+}
+
+int main (void){
+
+	alterar_aluno();
 	consultar_aluno();
+	exibir_aluno();
 	return 0;
 }
