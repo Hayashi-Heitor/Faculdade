@@ -168,10 +168,47 @@ void alterar_aluno(void){
 	getche();
 }
 
-int main (void){
+void OrdenarAluno(void) { 
+	TPaluno RegA, RegB;
+	int QtdeReg;
+	FILE *PTRalu = fopen("Alunos.dat", "rb+");
+	
+	if(PTRalu == NULL)
+		printf("\nErro de Abretura!\n");
+		
+	else {
+		fseek(PTRalu, 0, 2);
+		QtdeReg = ftell(PTRalu) / sizeof(TPaluno);
+		
+		for(int i = 0; i < QtdeReg-1; i++)
+			for(int j = i+1; j < QtdeReg; j++) {
+				
+				fseek(PTRalu, i*sizeof(TPaluno), 0);
+				fread(&RegA, sizeof(TPaluno), 1, PTRalu);
+				
+				fseek(PTRalu, j*sizeof(TPaluno), 0);
+				fread(&RegB, sizeof(TPaluno), 1, PTRalu);
+				
+				if(stricmp(RegA.nome, RegB.nome) > 0) { 
+					fseek(PTRalu, i*sizeof(TPaluno), 0);
+					fwrite(&RegB, sizeof(TPaluno), 1, PTRalu);
+					
+					fseek(PTRalu, j*sizeof(TPaluno), 0);
+					fwrite(&RegA, sizeof(TPaluno), 1, PTRalu);
+					
+				}
+			}
+		fclose(PTRalu);
+		printf("Ordenacao concluida com sucesso!\nPressione qualquer tecla para continuar... ");
+	}
+	getche();
+	
+}
 
-	alterar_aluno();
-	consultar_aluno();
+int main (void){
+	
+	OrdenarAluno();
 	exibir_aluno();
+	
 	return 0;
 }
