@@ -3,212 +3,312 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <locale.h>
 
-struct TPaluno{
-	char ra[14], nome[30];
-	int ano_nasc; 
+struct TpAluno {
+	char RA[14], Nome[40];
+	int AnoNasc;
 };
 
-int busca_aluno_ra(FILE *PTRaluno, char chave_ra[14]){ //exaustiva em arquivo
-	TPaluno r;
+int BuscaAlunoRA(FILE *PtrAluno, char ChaveRA[14]) {
+	TpAluno R;
+	//fseek(PtrAluno,0,0);
+	rewind(PtrAluno);
+	fread(&R,sizeof(TpAluno),1,PtrAluno);
 	
-	rewind(PTRaluno);
-	//fseek(PTRaluno, 0, 0);
+	while (!feof(PtrAluno) && strcmp(ChaveRA,R.RA)!=0)
+		fread(&R,sizeof(TpAluno),1,PtrAluno);
 	
-	fread(&r, sizeof(TPaluno), 1, PTRaluno);
-	while(!feof(PTRaluno) && strcmp(chave_ra, r.ra) != 0)
-		fread(&r, sizeof(TPaluno), 1, PTRaluno);
-	
-	if(strcmp(chave_ra, r.ra) == 0)
-		return ftell(PTRaluno) - sizeof(TPaluno);
+	if (strcmp(ChaveRA,R.RA)==0)
+		return ftell(PtrAluno)-sizeof(TpAluno);
 	else
 		return -1;
-	
 }
 
-void gravar_aluno(void){
-	TPaluno reg;
+void GravarAluno(void) {
+	TpAluno Reg;
+	FILE *PtrAlu = fopen("Alunos.dat","ab+");
 	
-	FILE *PTRaluno = fopen("Alunos.dat", "ab"); //'wb' cria toda vez, 'ab' abbend
+	system("cls");
 	printf("\n## Cadastro de Alunos ##\n");
-	printf("\nR.A: ");
+	printf("R.A.: ");
 	fflush(stdin);
-	gets(reg.ra);
-	
-	while(strcmp(reg.ra,"\0") != 0){
+	gets(Reg.RA);
+	while (strcmp(Reg.RA,"\0")!=0) {
 		
-		printf("\nNome do aluno: ");
-		fflush(stdin);
-		gets(reg.nome);
-		printf("\nAno de Nasc: ");
-		scanf("%d", &reg.ano_nasc);
-		
-		fwrite(&reg, sizeof(TPaluno), 1, PTRaluno); //sizeof, tem a função de pegar os bytes: reg ou TPaluno, geralmente tipo pois geralmente não é modificado
-		
-		printf("\nR.A: ");
-		fflush(stdin);
-		gets(reg.ra);
-	}
-	fclose(PTRaluno);
-}
-
-void exibir_aluno(void){
-	TPaluno r;
-	
-	FILE *PTRaluno = fopen("Alunos.dat","rb"); // 'rb' ou 'rb+' tem que existir!
-	clrscr();
-	printf("\n### Contudo do Arquivo Alunos.dat ###\n");
-	
-	if(PTRaluno == NULL) // confere se o ponteiro está apontando para nada
-		printf("\nErro de abertura\n");
-		
-	else{
-		fread(&r, sizeof(TPaluno), 1, PTRaluno);
-		while(!feof(PTRaluno)){
-			printf("\n-------------------\nRA: %s\n\nNome: %s\n\nAno nasc: %d\n-------------------\n", r.ra, r.nome, r.ano_nasc);
-			fread(&r, sizeof(TPaluno), 1, PTRaluno);
-		}
-		
-		fclose(PTRaluno);
-		printf("\n--- Fim do Arquivo ---\n");
-		
-	}
-	getche();
-}
-
-void consultar_aluno(void){
-	TPaluno RAluno;
-	int pos;
-	
-	FILE *PTRaluno = fopen("Alunos.dat", "rb");
-	clrscr();
-	printf("\n## Consultar por R.A ##\n");
-	
-	if(PTRaluno == NULL)
-		printf("\nErro de Abertura");
-		
-	else{
-		printf("\nR.A a Consultar: ");
-		fflush(stdin);
-		gets(RAluno.ra);
-		
-		while(strcmp(RAluno.ra, "\0") != 0){
-			pos = busca_aluno_ra(PTRaluno, RAluno.ra);
-			
-			if(pos == -1)
-				printf("\nR.A nao cadastrado!\n");
-				
-			else{
-				fseek(PTRaluno, pos, 0);
-				fread(&RAluno, sizeof(TPaluno), 1, PTRaluno);
-				printf("\n*** Dados Encontrados ***\n");
-				printf("R.A: %s\n", RAluno.ra);
-				printf("Nome: %s\n", RAluno.nome);
-				printf("Ano nasc: %d\n", RAluno.ano_nasc);
-			}
-			
-			printf("\nR.A a Consultar: ");
+		if (BuscaAlunoRA(PtrAlu,Reg.RA) == -1) {
+			printf("Nome do Aluno: ");
 			fflush(stdin);
-			gets(RAluno.ra);
+			gets(Reg.Nome);
+			printf("Ano de Nasc.:" );
+			scanf("%d",&Reg.AnoNasc);
+			
+			fwrite(&Reg,sizeof(TpAluno),1,PtrAlu);
+			printf("\nDados Cadastrados!\n");
 		}
-		
-		fclose(PTRaluno);
+		else
+			printf("\nR.A. já Cadastrado!\n");
+			
+		getch();
+		printf("\nR.A.: ");
+		fflush(stdin);
+		gets(Reg.RA);
 	}
+	fclose(PtrAlu);
+}
+
+void ExibirAluno(void) {
+	TpAluno R;
+	FILE *PtrAlu = fopen("Alunos.dat","rb");
+	
+	system("cls");
+	printf("\n### Conteudo do Arquivo Alunos.dat###\n");
+	
+	if (PtrAlu == NULL)
+		printf("\nErro de Abertura!\n");
+	else {
+			fread(&R,sizeof(TpAluno),1,PtrAlu);
+			while (!feof(PtrAlu))
+			{
+				printf("\nRA: %s",R.RA);
+				printf("\nNome: %s",R.Nome);
+				printf("\nAno Nasc.: %d\n",R.AnoNasc);
+				fread(&R,sizeof(TpAluno),1,PtrAlu);
+			}
+			fclose(PtrAlu);
+			printf("\n----Fim do Arquivo----\n");
+		}	
 	getche();
 }
 
-void alterar_aluno(void){
-	TPaluno RAluno;
+void ConsultarAluno(void) {
+	TpAluno RAluno;
 	int pos;
+	FILE *PtrAlu = fopen("Alunos.dat","rb");
 	
-	FILE *PTRaluno = fopen("Alunos.dat", "rb+");
-	clrscr();
-	printf("\n## Consultar por R.A ##\n");
+	system("cls");
+	printf("\n## Consultar por R.A. ##\n");
 	
-	if(PTRaluno == NULL)
-		printf("\nErro de Abertura");
-		
-	else{
-		printf("\nR.A a Alterar: ");
-		fflush(stdin);
-		gets(RAluno.ra);
-		
-		while(strcmp(RAluno.ra, "\0") != 0){
-			pos = busca_aluno_ra(PTRaluno, RAluno.ra);
-			
-			if(pos == -1)
-				printf("\nR.A nao cadastrado!\n");
-				
-			else{
-				fseek(PTRaluno, pos, 0);
-				fread(&RAluno, sizeof(TPaluno), 1, PTRaluno);
-				printf("\n*** Dados Encontrados ***\n");
-				printf("R.A: %s\n", RAluno.ra);
-				printf("Nome: %s\n", RAluno.nome);
-				printf("Ano nasc: %d\n", RAluno.ano_nasc);
-				
-				printf("\nDeseja Alterar (S/N)?");
-				if(toupper(getche()) == 'S'){
-					printf("\nNovo nome: ");
-					fflush(stdin);
-					gets(RAluno.nome);
-					printf("\nNovo Ano nasc: ");
-					scanf("%d", &RAluno.ano_nasc);
-					fseek(PTRaluno, pos, 0);
-					fwrite(&RAluno, sizeof(TPaluno), 1, PTRaluno);
-					printf("\nRegistro Atualizado com sucesso");
+	if (PtrAlu == NULL)
+		printf("\nErro de Abertura!\n");
+	else {
+			printf("\nR.A. a Consultar: ");
+			fflush(stdin);
+			gets(RAluno.RA);
+			while(strcmp(RAluno.RA,"\0")!=0)
+			{
+				pos = BuscaAlunoRA(PtrAlu,RAluno.RA);
+				if (pos == -1)
+					printf("\nR.A. Nao Cadastrado!\n");
+				else
+					{
+						printf("\n*** Dados Encontrados ***\n");
+						fseek(PtrAlu,pos,0);
+						fread(&RAluno,sizeof(TpAluno),1,PtrAlu);
+						printf("R.A.: %s\n",RAluno.RA);
+						printf("Nome: %s\n",RAluno.Nome);
+						printf("Ano Nasc.: %d\n",RAluno.AnoNasc);
+					}
+					
+				getch();
+				printf("\nR.A. a Consultar: ");
+				fflush(stdin);
+				gets(RAluno.RA);
+			}	
+			fclose(PtrAlu);
+		}
+	
+	getche();
+}
+
+void AlterarAluno(void) {
+	TpAluno RAluno;
+	int pos;
+	FILE *PtrAlu = fopen("Alunos.dat","rb+");
+	
+	system("cls");
+	printf("\n## Alterar por R.A. ##\n");
+	
+	if (PtrAlu == NULL)
+		printf("\nErro de Abertura!\n");
+	else {
+			printf("\nR.A. a Alterar: ");
+			fflush(stdin);
+			gets(RAluno.RA);
+			while(strcmp(RAluno.RA,"\0")!=0)
+			{
+				pos = BuscaAlunoRA(PtrAlu,RAluno.RA);
+				if (pos == -1)
+					printf("\nR.A. Nao Cadastrado!\n");
+				else
+					{
+						printf("\n*** Dados Encontrados ***\n");
+						fseek(PtrAlu,pos,0);
+						fread(&RAluno,sizeof(TpAluno),1,PtrAlu);
+						printf("R.A.: %s\n",RAluno.RA);
+						printf("Nome: %s\n",RAluno.Nome);
+						printf("Ano Nasc.: %d\n",RAluno.AnoNasc);
+						
+						printf("\nDeseja Alterar (S/N)?");
+						if (toupper(getche())=='S')
+						{
+							printf("Novo Nome: ");
+							fflush(stdin);
+							gets(RAluno.Nome);
+							printf("Novo Ano Nasc.: ");
+							scanf("%d",&RAluno.AnoNasc);
+							fseek(PtrAlu,pos,0);
+							fwrite(&RAluno,sizeof(TpAluno),1,PtrAlu);	
+							printf("\nRegistro Atualizado!\n");
+						}
+					}
+					
+				getch();
+				printf("\nR.A. a Consultar: ");
+				fflush(stdin);
+				gets(RAluno.RA);
+			}	
+			fclose(PtrAlu);
+		}
+	
+	getche();
+}
+
+void OrdenarAluno(void) {
+	TpAluno RegA, RegB;
+	int QtdeReg, a, b;
+	FILE *PtrAlu = fopen("Alunos.dat","rb+");
+	
+	system("cls");
+	if (PtrAlu==NULL)
+		printf("\nErro de Abertura!\n");
+	else {
+			fseek(PtrAlu,0,2);
+			QtdeReg = ftell(PtrAlu)/sizeof(TpAluno);
+			for(a=0; a<QtdeReg-1; a++)
+				for(b=a+1; b<QtdeReg; b++)
+				{
+					fseek(PtrAlu,a*sizeof(TpAluno),0);
+					fread(&RegA,sizeof(TpAluno),1,PtrAlu);
+					
+					fseek(PtrAlu,b*sizeof(TpAluno),0);
+					fread(&RegB,sizeof(TpAluno),1,PtrAlu);
+					if (stricmp(RegA.Nome,RegB.Nome)>0)
+					{
+						fseek(PtrAlu,a*sizeof(TpAluno),0);
+						fwrite(&RegB,sizeof(TpAluno),1,PtrAlu);
+						
+						fseek(PtrAlu,b*sizeof(TpAluno),0);
+						fwrite(&RegA,sizeof(TpAluno),1,PtrAlu);
+					}
+					
 				}
-			}
-			printf("\nR.A a Alterar: ");
-			fflush(stdin);
-			gets(RAluno.ra);
+				
+			fclose(PtrAlu);
+			printf("\nArquivo Aluno Ordenado!\n");
 		}
-		fclose(PTRaluno);
-	}
 	getche();
 }
 
-void OrdenarAluno(void) { 
-	TPaluno RegA, RegB;
-	int QtdeReg;
-	FILE *PTRalu = fopen("Alunos.dat", "rb+");
+void ExclusaoFisica(void) {
+	TpAluno RegAlu;
+	FILE *PtrAlu = fopen("Alunos.dat", "rb");
+	int pos;
+	char AuxRA[14];
 	
-	if(PTRalu == NULL)
-		printf("\nErro de Abretura!\n");
+	system("cls");
+	if(PtrAlu == NULL)
+		printf("\nErro de Abertura");
 		
 	else {
-		fseek(PTRalu, 0, 2);
-		QtdeReg = ftell(PTRalu) / sizeof(TPaluno);
 		
-		for(int i = 0; i < QtdeReg-1; i++)
-			for(int j = i+1; j < QtdeReg; j++) {
+		printf("\nR.A a Excluir: ");
+		fflush(stdin);
+		gets(AuxRA);
+		pos = BuscaAlunoRA(PtrAlu, AuxRA);
+		
+		if (pos == -1) {
+			printf("\nAluno não cadastrado!\n");
+			fclose(PtrAlu);
+		}
+			
+		else {
+			
+			printf("\nDados do aluno:\n");
+			fseek(PtrAlu, pos, 0);
+			fread(&RegAlu, sizeof(TpAluno), 1, PtrAlu);
+			printf("R.A: %s\n", RegAlu.RA);
+			printf("Nome: %s\n", RegAlu.Nome);
+			printf("Ano de Nasc: %d\n", RegAlu.AnoNasc);
+			printf("\nConfirmar a exclusão do aluno? (S/N) ");
+			
+			if(toupper(getche()) == 'S') {
 				
-				fseek(PTRalu, i*sizeof(TPaluno), 0);
-				fread(&RegA, sizeof(TPaluno), 1, PTRalu);
+				FILE *PtrTemp = fopen("Temp.dat", "wb");
+				rewind(PtrAlu);
+				fread(&RegAlu, sizeof(TpAluno), 1, PtrAlu);
 				
-				fseek(PTRalu, j*sizeof(TPaluno), 0);
-				fread(&RegB, sizeof(TPaluno), 1, PTRalu);
-				
-				if(stricmp(RegA.nome, RegB.nome) > 0) { 
-					fseek(PTRalu, i*sizeof(TPaluno), 0);
-					fwrite(&RegB, sizeof(TPaluno), 1, PTRalu);
+				while(!feof(PtrAlu)) {
+					if(strcmp(AuxRA, RegAlu.RA) != 0)
+						fwrite(&RegAlu, sizeof(TpAluno), 1, PtrTemp);
 					
-					fseek(PTRalu, j*sizeof(TPaluno), 0);
-					fwrite(&RegA, sizeof(TPaluno), 1, PTRalu);
-					
+					fread(&RegAlu, sizeof(TpAluno), 1, PtrAlu);
 				}
+				fclose(PtrAlu);
+				fclose(PtrTemp);
+				remove("Alunos.dat");
+				rename("Temp.dat", "Alunos.dat");
+				printf("\nExclusão realizada com sucesso!\n");
 			}
-		fclose(PTRalu);
-		printf("Ordenacao concluida com sucesso!\nPressione qualquer tecla para continuar... ");
+			else
+				fclose(PtrAlu);
+		}
 	}
 	getche();
-	
 }
 
-int main (void){
+char Menu(void) {
 	
-	OrdenarAluno();
-	exibir_aluno();
+	clrscr();
+	printf("\n ###  M E N U   A L U N O S ###\n");
+	printf("\n[A] Cadastrar");
+	printf("\n[B] Exibir");
+	printf("\n[C] Consultar por R.A.");
+	printf("\n[D] Alterar por R.A.");
+	printf("\n[E] Ordenar por R.A.");
+	printf("\n[F] Exclusão por R.A");
+	printf("\n[ESC] Finalizar");
+	printf("\nOpcao desejada: ");
+	return toupper(getche());
+}
+
+int main(void) {
+	char opcao;
+	
+	setlocale(LC_ALL, "portuguese");
+	do
+	{
+		opcao = Menu();
+		switch(opcao)
+		{
+			case 'A':	GravarAluno();
+						break;
+			case 'B':	ExibirAluno();
+						break;
+			case 'C':	ConsultarAluno();
+						break;
+			case 'D':	AlterarAluno();
+						break;
+			case 'E':	OrdenarAluno();
+						break;
+			case 'F':	ExclusaoFisica();
+						break; 	
+		}
+	}while (opcao!=27);
 	
 	return 0;
 }
+
+
+
+
