@@ -4,7 +4,7 @@ struct TpCidade {
 	int Populacao;
 };
 
-//Protótipos das Operações
+//ProtÃ³tipos das OperaÃ§Ãµes
 void Cadastrar(void);
 void InserirRegistro(FILE *PtrArq, TpCidade Reg);
 int BuscarNome(FILE *PtrArq, char NomeCidade[50]);
@@ -12,7 +12,7 @@ void Relatorio(void);
 void Ordenar(void);
 void Consultar(void);
 
-//Operações Associadas
+//OperaÃ§Ãµes Associadas
 void Cadastrar(void) {
 	FILE *PtrCidade = fopen("Cidades.dat", "ab+");
 	TpCidade RCidade;
@@ -23,8 +23,13 @@ void Cadastrar(void) {
 	gets(RCidade.Nome);
 	
 	while(strcmp(RCidade.Nome, "\0") != 0) {
-		printf("Populaçao: ");
+		printf("PopulaÃ§ao: ");
 		scanf("%d", &RCidade.Populacao);
+		
+		
+		printf("\nCidade: ");
+		fflush(stdin);
+		gets(RCidade.Nome);
 	}
 	
 	InserirRegistro(PtrCidade, RCidade);
