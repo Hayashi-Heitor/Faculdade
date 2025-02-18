@@ -15,6 +15,14 @@
 #define LARGURA_TELA_OPCOES 70
 #define ALTURA_TELA_OPCOES 3
 
+struct TpReg {
+	
+	int Codigo;
+	char Nome[TF];
+	float Valor;
+	
+};
+
 void VerificaArquivo(char NomeArquivo[TF]) {
 	FILE *PtrArq = fopen(NomeArquivo, "r");
 	
@@ -92,23 +100,26 @@ void ExibeTextoChr(char NomeArquivo[TF]) {
 	
 }
 
-void LeTextoStr(char NomeArquivo[TF]) {
+void LeTextoFORM(char NomeArquivo[TF]) {
 	FILE *PtrTxt = fopen(NomeArquivo, "a");
-	char Linha[TF];
-	
+	TpReg R;
+	 
 	clrscr();
 	printf("Nome do Arquivo: %s\n", NomeArquivo);
-	printf("Digite um texto e pressione [ENTER] em uma linha vazia para finalizar\n");
-	fflush(stdin);
-	gets(Linha);
+	printf("Digite o CODIGO e pressione ZERO NO CODIGO para finalizar\n");
+	scanf("%d", &R.Codigo);
 	
-	while(strcmp(Linha,"\0") != 0) {
+	while(R.Codigo > 0) {
 		
-		fputs(Linha, PtrTxt);
-		fputs("\n", PtrTxt);
-		
+		printf("Nome: ");
 		fflush(stdin);
-		gets(Linha);
+		gets(R.Nome);
+		printf("Valor: R$ ");
+		scanf("%f", &R.Valor);
+		fprintf(PtrTxt, "%d \t %s \t %.2f\n", R.Codigo, R.Nome, R.Valor);
+		
+		printf("Digite o CODIGO e pressione ZERO NO CODIGO para finalizar\n");
+		scanf("%d", &R.Codigo);
 		
 	}
 	
@@ -116,20 +127,23 @@ void LeTextoStr(char NomeArquivo[TF]) {
 	
 }
 
-void ExibeTextoStr(char NomeArquivo[TF]) {
+void ExibeTextoFORM(char NomeArquivo[TF]) {
 	FILE *PtrTxt = fopen(NomeArquivo, "r");
-	char Caracter;
+	TpReg Reg;
+	float Total;
 	
 	clrscr();
 	printf("Nome do Arquivo: %s\n", NomeArquivo);
-	Caracter = fgetc(PtrTxt);
+	fscanf(PtrTxt, "%d %s %f", &Reg.Codigo, &Reg.Nome, &Reg.Valor);
 	
 	while(!feof(PtrTxt)) {
-
-		printf("%c", Caracter);	
-		Caracter = fgetc(PtrTxt);
 		
-	}
+		Total += Reg.Valor;
+		printf("%d \t %s \t %.2f\n", Reg.Codigo, Reg.Nome, Reg.Valor);	
+		fscanf(PtrTxt, "%d %s %f", &Reg.Codigo, &Reg.Nome, &Reg.Valor);
+		
+	}	
+	printf("\n\nTOTAL: %.2f R$", Total);
 	getche();
 	
 	fclose(PtrTxt);
@@ -173,7 +187,7 @@ void DesenhaInterface(void) {
 }
 
 void NavegaMenu(void) {
-	int OpcaoSelecionada
+	int OpcaoSelecionada;
 	
 	if(OpcaoSelecionada == 1) {
 		
@@ -188,13 +202,15 @@ void NavegaMenu(void) {
 int main (void) {
 	char Arquivo[TF];
 	
-	//setlocale(LC_ALL, "portuguese");
-	/*LerNome(Arquivo);
+	setlocale(LC_ALL, "portuguese");
+	LerNome(Arquivo);
 	VerificaArquivo(Arquivo);
-	LeTextoStr(Arquivo);
-	ExibeTextoStr(Arquivo);*/
+	/*LeTextoStr(Arquivo);
+	ExibeTextoStr(Arquivo);
 	DesenhaInterface();
-	printf("\n\n");
+	LeTextoFORM(Arquivo);*/
+	ExibeTextoFORM(Arquivo);
+
 	return 0;
 	
 }
